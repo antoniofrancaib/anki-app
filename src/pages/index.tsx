@@ -1,1 +1,166 @@
- 
+import React, { useEffect, useRef } from "react";
+import Link from "next/link";
+import styles from "../styles/Home.module.css";
+
+export default function Home() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const setCanvasSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    setCanvasSize();
+    window.addEventListener('resize', setCanvasSize);
+
+    // Particle class
+    class Particle {
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      opacity: number;
+
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.opacity = Math.random() * 0.5;
+      }
+
+      update(mouseX: number, mouseY: number) {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // Mouse interaction
+        const dx = mouseX - this.x;
+        const dy = mouseY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = 200;
+
+        if (distance < maxDistance) {
+          const force = (maxDistance - distance) / maxDistance;
+          this.speedX -= (dx / distance) * force * 0.1;
+          this.speedY -= (dy / distance) * force * 0.1;
+        }
+
+        // Boundaries
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw(ctx: CanvasRenderingContext2D) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    // Create particles
+    const particles: Particle[] = [];
+    for (let i = 0; i < 100; i++) {
+      particles.push(new Particle());
+    }
+
+    // Animation loop
+    const animate = () => {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(particle => {
+        particle.update(mouseRef.current.x, mouseRef.current.y);
+        particle.draw(ctx);
+      });
+
+      // Draw connections
+      particles.forEach(particle1 => {
+        particles.forEach(particle2 => {
+          const dx = particle1.x - particle2.x;
+          const dy = particle1.y - particle2.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particle1.x, particle1.y);
+            ctx.lineTo(particle2.x, particle2.y);
+            ctx.stroke();
+          }
+        });
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    // Track mouse movement
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = {
+        x: e.clientX,
+        y: e.clientY
+      };
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', setCanvasSize);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return (
+    <div className={styles.container}>
+      <canvas ref={canvasRef} className={styles.backgroundCanvas} />
+      <nav className={styles.nav}>
+        <div className={styles.navContent}>
+          <Link href="/" className={styles.logo}>
+            recall
+          </Link>
+          <div className={styles.navLinks}>
+            <Link href="/dashboard" className={styles.navLink}>
+              dashboard
+            </Link>
+            <Link href="/review" className={styles.navLink}>
+              review
+            </Link>
+            <Link href="/access" className={styles.accessButton}>
+              access
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <main className={styles.main}>
+        <div className={styles.content}>
+          <h1 className={styles.title}>
+            Effortless
+            <br />
+            memorization
+          </h1>
+          <div className={styles.subtitle}>
+            Master anything through the power of spaced repetition.
+          </div>
+        </div>
+      </main>
+
+      <footer className={styles.footer}>
+        <Link href="/privacy">Privacy</Link>
+        <Link href="/about">About</Link>
+      </footer>
+    </div>
+  );
+}

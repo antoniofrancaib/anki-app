@@ -1,0 +1,143 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #718096;
+  font-size: 1.2rem;
+}
+
+.statsSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.statCard {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.statCard h3 {
+  color: #4a5568;
+  margin-bottom: 1rem;
+}
+
+.reviewSection {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+  margin-bottom: 2rem;
+}
+
+.questionSection {
+  margin-bottom: 1.5rem;
+}
+
+.question {
+  font-size: 1.2rem;
+  color: #2d3748;
+  margin: 1rem 0;
+}
+
+.showAnswerBtn {
+  background: #4299e1;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.showAnswerBtn:hover {
+  background: #3182ce;
+}
+
+.answerSection {
+  background: #f7fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.answer {
+  color: #4a5568;
+  margin: 1rem 0;
+}
+
+.ratingSection {
+  margin-top: 1.5rem;
+}
+
+.ratingButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.ratingBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #edf2f7;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ratingBtn:hover {
+  background: #4299e1;
+  color: white;
+}
+
+.ratingGuide {
+  display: flex;
+  justify-content: space-between;
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.completedMessage {
+  text-align: center;
+  padding: 2rem;
+}
+
+.completedMessage h2 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .statsSection {
+    grid-template-columns: 1fr;
+  }
+} 

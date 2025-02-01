@@ -1,1 +1,22 @@
- 
+{
+    "name": "anki-app",
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "test": "jest"
+    },
+    "dependencies": {
+        "firebase": "^9.23.0",
+        "next": "^12.0.0",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^16.0.0",
+        "@types/react": "^18.0.0",
+        "jest": "^28.0.0",
+        "typescript": "^4.0.0"
+    }
+}
