@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const [showLogin, setShowLogin] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
 
@@ -122,6 +124,18 @@ export default function Home() {
     };
   }, []);
 
+  // Close modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setShowLogin(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className={styles.container}>
       <canvas ref={canvasRef} className={styles.backgroundCanvas} />
@@ -137,12 +151,54 @@ export default function Home() {
             <Link href="/review" className={styles.navLink}>
               review
             </Link>
-            <Link href="/access" className={styles.accessButton}>
+            <button 
+              onClick={() => setShowLogin(true)} 
+              className={styles.accessButton}
+            >
               access
-            </Link>
+            </button>
           </div>
         </div>
       </nav>
+
+      {showLogin && (
+        <div className={styles.modalOverlay}>
+          <div ref={modalRef} className={styles.modal}>
+            <button 
+              className={styles.closeButton}
+              onClick={() => setShowLogin(false)}
+            >
+              ×
+            </button>
+            <div className={styles.modalContent}>
+              <h2>Welcome back</h2>
+              <form className={styles.loginForm}>
+                <div className={styles.inputGroup}>
+                  <input 
+                    type="email" 
+                    placeholder="Email"
+                    className={styles.input}
+                  />
+                </div>
+                <div className={styles.inputGroup}>
+                  <input 
+                    type="password" 
+                    placeholder="Password"
+                    className={styles.input}
+                  />
+                </div>
+                <button type="submit" className={styles.submitButton}>
+                  Sign in
+                </button>
+              </form>
+              <div className={styles.modalFooter}>
+                <p>Don't have an account? <button className={styles.textButton}>Sign up</button></p>
+                <button className={styles.textButton}>Forgot password?</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className={styles.main}>
         <div className={styles.content}>
