@@ -31,10 +31,9 @@ export default function Home() {
       speedX: number;
       speedY: number;
       opacity: number;
-
       constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+        this.x = Math.random() * (canvas?.width ?? window.innerWidth);
+        this.y = Math.random() * (canvas?.height ?? window.innerHeight);
         this.size = Math.random() * 2;
         this.speedX = Math.random() * 2 - 1;
         this.speedY = Math.random() * 2 - 1;
@@ -56,10 +55,9 @@ export default function Home() {
           this.speedX -= (dx / distance) * force * 0.1;
           this.speedY -= (dy / distance) * force * 0.1;
         }
-
         // Boundaries
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        if (this.x < 0 || this.x > (canvas?.width ?? window.innerWidth)) this.speedX *= -1;
+        if (this.y < 0 || this.y > (canvas?.height ?? window.innerHeight)) this.speedY *= -1;
       }
 
       draw(ctx: CanvasRenderingContext2D) {
